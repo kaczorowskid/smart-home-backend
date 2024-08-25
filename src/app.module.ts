@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { DatabaseModule } from './database/database.module';
 import { DevicesModule } from './devices/devices.module';
+import { ThermometerModule } from './thermometer/thermometer.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DevicesModule } from './devices/devices.module';
     ConfigModule.forRoot(),
     DatabaseModule,
     DevicesModule,
+    ThermometerModule,
   ],
 })
 export class AppModule {}
