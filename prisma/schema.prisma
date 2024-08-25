@@ -13,14 +13,13 @@ enum DeviceType {
 }
 
 model Device {
-  id                String            @id @default(uuid())
-  type              DeviceType        @default(THERMOMETER)
-  name              String            @unique
-  device_id         String            @unique
-  created_at        DateTime          @default(now())
-  updated_at        DateTime          @updatedAt
-  thermometers      Thermometer[]
-  displayed_devices DisplayedDevice[]
+  id           String        @id @default(uuid())
+  type         DeviceType    @default(THERMOMETER)
+  name         String        @unique
+  device_id    String        @unique
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+  thermometers Thermometer[]
 }
 
 model Thermometer {
@@ -32,11 +31,4 @@ model Thermometer {
   device_id   String
   date        String
   device      Device   @relation(fields: [device_id], references: [id])
-}
-
-model DisplayedDevice {
-  id        String @id @default(uuid())
-  order     Int    @unique
-  device_id String @unique
-  device    Device @relation(fields: [device_id], references: [id])
 }
