@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DeviceType {
+  THERMOMETER
+  BLIND
+}
+
+model Device {
+  id                String            @id @default(uuid())
+  type              DeviceType        @default(THERMOMETER)
+  name              String            @unique
+  device_id         String            @unique
+  created_at        DateTime          @default(now())
+  updated_at        DateTime          @updatedAt
+  thermometers      Thermometer[]
+  displayed_devices DisplayedDevice[]
+}
+
+model Thermometer {
+  id          String   @id @default(uuid())
+  temperature Float
+  humidity    Float
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  device_id   String
+  date        String
+  device      Device   @relation(fields: [device_id], references: [id])
+}
+
+model DisplayedDevice {
+  id        String @id @default(uuid())
+  order     Int    @unique
+  device_id String @unique
+  device    Device @relation(fields: [device_id], references: [id])
+}
