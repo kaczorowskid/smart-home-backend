@@ -12,23 +12,33 @@ enum DeviceType {
   BLIND
 }
 
-model Device {
-  id           String        @id @default(uuid())
-  type         DeviceType    @default(THERMOMETER)
-  name         String        @unique
-  device_id    String        @unique
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
-  thermometers Thermometer[]
+model Thermometer {
+  id        String            @id @default(uuid())
+  name      String
+  deviceId  String            @unique
+  type      DeviceType        @default(THERMOMETER)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  data      ThermometerData[]
 }
 
-model Thermometer {
-  id          String   @id @default(uuid())
-  temperature Float
-  humidity    Float
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  device_id   String
-  date        String
-  device      Device   @relation(fields: [device_id], references: [id])
+model ThermometerData {
+  id          String      @id @default(uuid())
+  temperature Int
+  humidity    Int
+  date        DateTime
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  Thermometer Thermometer @relation(fields: [deviceId], references: [deviceId])
+  deviceId    String
+}
+
+model Blind {
+  id        String     @id @default(uuid())
+  name      String
+  value     Int?       @default(0)
+  deviceId  String     @unique
+  type      DeviceType @default(BLIND)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }

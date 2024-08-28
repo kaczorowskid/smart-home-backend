@@ -1,7 +1,8 @@
-import { $Enums, Prisma } from '@prisma/client';
+import { IntersectionType } from '@nestjs/mapped-types';
+import { CreateBlindDto } from 'src/blind/dto/create-blind.dto';
+import { CreateThermometerDto } from 'src/thermometer/dto/create-thermometer.dto';
 
-export class CreateDeviceDto implements Prisma.DeviceCreateInput {
-  name: string;
-  device_id: string;
-  type?: $Enums.DeviceType;
-}
+export class CreateDeviceDto extends IntersectionType(
+  CreateThermometerDto,
+  CreateBlindDto,
+) {}
