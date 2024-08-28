@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Blind" ALTER COLUMN "value" DROP NOT NULL,
+ALTER COLUMN "value" SET DEFAULT 0;

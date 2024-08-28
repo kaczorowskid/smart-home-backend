@@ -1,75 +1,71 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { BlindService } from 'src/blind/blind.service';
+import { ThermometerService } from 'src/thermometer/thermometer.service';
 import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
-import { DatabaseService } from 'src/database/database.service';
+import { DeleteDeviceDto } from './dto/delete-device.dto';
 
 @Injectable()
 export class DevicesService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly thermometerService: ThermometerService,
+    private readonly blindService: BlindService,
+  ) {}
 
   async createDevice(createDeviceDto: CreateDeviceDto) {
-    return await this.databaseService.device.create({ data: createDeviceDto });
-  }
-
-  async findAllWithSearch(name: string) {
-    return await this.databaseService.device.findMany({
-      orderBy: {
-        created_at: 'desc',
-      },
-      where: {
-        name: {
-          contains: name,
-          mode: 'insensitive',
-        },
-      },
-    });
-  }
-
-  async getOneDevice(id: string) {
-    return await this.databaseService.device.findUnique({
-      where: { id },
-      include: {
-        thermometers: {
-          orderBy: {
-            date: 'desc',
-          },
-          select: {
-            humidity: true,
-            temperature: true,
-            date: true,
-          },
-          take: 1,
-        },
-      },
-    });
+    if (createDeviceDto.type === 'BLIND') {
+      return await this.blindService.createBlind(createDeviceDto);
+    } else {
+      return await this.thermometerService.createThermometer(createDeviceDto);
+    }
   }
 
   async updateDevice(id: string, updateDeviceDto: UpdateDeviceDto) {
-    return await this.databaseService.device.update({
-      where: { id },
-      data: updateDeviceDto,
-    });
+    if (updateDeviceDto.type === 'BLIND') {
+      return await this.blindService.updateBlind(id, updateDeviceDto);
+    } else {
+      return await this.thermometerService.updateThermometer(
+        id,
+        updateDeviceDto,
+      );
+    }
   }
 
-  async deleteDevice(id: string) {
-    return await this.databaseService.device.delete({
-      where: { id },
-    });
+  async deleteDevice(id: string, deleteDeviceDto: DeleteDeviceDto) {
+    if (deleteDeviceDto.type === 'BLIND') {
+      return await this.blindService.deleteBlind(id);
+    } else {
+      return await this.thermometerService.deleteThermometer(id);
+    }
   }
 
-  async getDataFromDevice(id: string) {
-    return await this.databaseService.device.findUnique({
-      where: { id },
-      select: {
-        name: true,
-        thermometers: {
-          select: {
-            temperature: true,
-            humidity: true,
-            date: true,
-          },
-        },
-      },
-    });
+  async getAllDevices() {
+    const [thermometers, blinds] = await Promise.all([
+      this.thermometerService.getAllThermometers(),
+      this.blindService.getAllBlinds(),
+    ]);
+
+    const allDevices = [...thermometers, ...blinds];
+
+    return allDevices.sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
+  }
+
+  async getAllThermometers() {
+    return await this.thermometerService.getAllThermometers();
+  }
+
+  async getOneDevices(id: string) {
+    const [thermometers, blinds] = await Promise.all([
+      this.thermometerService.getOneThermometer(id),
+      this.blindService.getOneBlind(id),
+    ]);
+
+    return thermometers || blinds;
+  }
+
+  async getDataForGraph(id: string) {
+    return await this.thermometerService.getDataForGraph(id);
   }
 }

@@ -4,6 +4,8 @@ import { LoggerModule } from 'nestjs-pino';
 import { DatabaseModule } from './database/database.module';
 import { DevicesModule } from './devices/devices.module';
 import { ThermometerModule } from './thermometer/thermometer.module';
+import { ThermometerDataModule } from './thermometer-data/thermometer-data.module';
+import { BlindModule } from './blind/blind.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { ThermometerModule } from './thermometer/thermometer.module';
     DatabaseModule,
     DevicesModule,
     ThermometerModule,
+    ThermometerDataModule,
+    BlindModule,
   ],
 })
 export class AppModule {}

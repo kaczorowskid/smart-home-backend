@@ -1,13 +1,15 @@
 import { PrismaClient } from '@prisma/client';
-import { temperatureData } from './temperature.data';
+import { generateData } from './temperature.data';
 
 const prisma = new PrismaClient();
 
+const data = generateData();
+
 const main = async () => {
-  for (let item of temperatureData) {
-    await prisma.thermometer.create({
+  for (let item of data) {
+    await prisma.thermometerData.create({
       data: {
-        device_id: 'c8e16bcf-7bda-426c-bd99-4e2d3f5092f9',
+        deviceId: '1',
         ...item,
       },
     });
