@@ -24,8 +24,8 @@ model Thermometer {
 
 model ThermometerData {
   id          String      @id @default(uuid())
-  temperature Int
-  humidity    Int
+  temperature Float
+  humidity    Float
   date        DateTime
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
