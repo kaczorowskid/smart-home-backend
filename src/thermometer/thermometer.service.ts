@@ -14,7 +14,11 @@ export class ThermometerService {
   }
 
   async getAllThermometers() {
-    return await this.databaseService.thermometer.findMany({});
+    return await this.databaseService.thermometer.findMany({
+      include: {
+        data: true,
+      },
+    });
   }
 
   async getOneThermometer(id: string) {

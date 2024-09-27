@@ -36,7 +36,7 @@ export class AuthController {
 
     res.cookie('auth-token', token, {
       httpOnly: true,
-      maxAge: 600000,
+      maxAge: 6000000,
     });
 
     return user;
