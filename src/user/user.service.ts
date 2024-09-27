@@ -10,6 +10,10 @@ export class UserService {
     return await this.databaseService.user.create({ data: createUserDto });
   }
 
+  async getAllUsers() {
+    return await this.databaseService.user.findMany({});
+  }
+
   async getOneUser(email: string) {
     return await this.databaseService.user.findUnique({
       where: { email },

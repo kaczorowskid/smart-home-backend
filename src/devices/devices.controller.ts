@@ -25,9 +25,15 @@ export class DevicesController {
   getAllDevices() {
     return this.deviceServices.getAllDevices();
   }
+
   @Get('/thermometers')
   getAllThermometers() {
     return this.deviceServices.getAllThermometers();
+  }
+
+  @Get('/blinds')
+  getAllBlinds() {
+    return this.deviceServices.getAllBlinds();
   }
 
   @Get(':id')

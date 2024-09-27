@@ -56,6 +56,10 @@ export class DevicesService {
     return await this.thermometerService.getAllThermometers();
   }
 
+  async getAllBlinds() {
+    return await this.blindService.getAllBlinds();
+  }
+
   async getOneDevices(id: string) {
     const [thermometers, blinds] = await Promise.all([
       this.thermometerService.getOneThermometer(id),
