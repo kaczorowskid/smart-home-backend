@@ -8,6 +8,7 @@ import { ThermometerDataModule } from './thermometer-data/thermometer-data.modul
 import { BlindModule } from './blind/blind.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     BlindModule,
     UserModule,
     AuthModule,
+    EmailModule,
   ],
 })
 export class AppModule {}

@@ -11,18 +11,12 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginUserDto } from './dto/login-user.dto';
-import { RegisterUserDto } from './dto/register-user.dto';
 import { Request, Response } from 'express';
 import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  @Post('/register')
-  async registerUser(@Body() registerUserDto: RegisterUserDto) {
-    return this.authService.registerUser(registerUserDto);
-  }
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
