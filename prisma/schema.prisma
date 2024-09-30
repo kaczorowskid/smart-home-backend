@@ -12,6 +12,11 @@ enum DeviceType {
   BLIND
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model Thermometer {
   id        String            @id @default(uuid())
   name      String
@@ -44,11 +49,13 @@ model Blind {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  surname   String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(uuid())
+  name       String
+  surname    String
+  email      String   @unique
+  password   String
+  role       UserRole @default(USER)
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
