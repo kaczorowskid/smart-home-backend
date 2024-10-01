@@ -1,6 +1,6 @@
 import { $Enums, Prisma } from '@prisma/client';
 
-export class RegisterUserDto implements Prisma.UserCreateInput {
+export class CreateUserDto implements Prisma.UserCreateInput {
   name: string;
   surname: string;
   email: string;
