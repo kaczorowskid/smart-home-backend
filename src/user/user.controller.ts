@@ -9,14 +9,15 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CretaeUserByAdminDto } from './dto/create-user-by-admin.dto';
-import { RegisterUserDto } from './dto/register-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async registerUser(@Body() createUserByAdminDto: CretaeUserByAdminDto) {
+  async createUser(@Body() createUserByAdminDto: CretaeUserByAdminDto) {
     return this.userService.createUserByAdmin(createUserByAdminDto);
   }
 
@@ -25,9 +26,9 @@ export class UserController {
     return this.userService.getAllUsers();
   }
 
-  @Get(':id')
-  getOneUser(@Param('id') id: string) {
-    return this.userService.getOneUser(id);
+  @Get(':email')
+  getOneUser(@Param('email') email: string) {
+    return this.userService.getOneUser(email);
   }
 
   @Delete(':id')
@@ -36,11 +37,19 @@ export class UserController {
   }
 
   @Patch(':id')
-  async registerAndVerifyUser(
+  async updateUser(
     @Param('id') id: string,
-    @Body() registerUserDto: RegisterUserDto,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.registerAndVerifyUser(id, registerUserDto);
+    return this.userService.updateUser(id, updateUserDto);
+  }
+
+  @Patch(':id')
+  async createAndVerifyUser(
+    @Param('id') id: string,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    return this.userService.createAndVerifyUser(id, createUserDto);
   }
 
   @Get('/token/:token')

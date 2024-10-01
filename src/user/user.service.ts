@@ -3,8 +3,9 @@ import { DatabaseService } from 'src/database/database.service';
 import { EmailService } from 'src/email/email.service';
 import { CretaeUserByAdminDto } from './dto/create-user-by-admin.dto';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterUserDto } from './dto/register-user.dto';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -53,13 +54,13 @@ export class UserService {
     return this.getOneUser(email);
   }
 
-  async registerAndVerifyUser(id: string, registerUserDto: RegisterUserDto) {
-    const passwordHash = await bcrypt.hash(registerUserDto.password, 10);
+  async createAndVerifyUser(id: string, createUserDto: CreateUserDto) {
+    const passwordHash = await bcrypt.hash(createUserDto.password, 10);
 
     return await this.databaseService.user.update({
       where: { id },
       data: {
-        ...registerUserDto,
+        ...createUserDto,
         password: passwordHash,
         isVerified: true,
       },
@@ -69,6 +70,13 @@ export class UserService {
   async deleteUser(id: string) {
     return await this.databaseService.user.delete({
       where: { id },
+    });
+  }
+
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    return await this.databaseService.user.update({
+      where: { id },
+      data: updateUserDto,
     });
   }
 }
