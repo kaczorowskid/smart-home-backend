@@ -16,16 +16,6 @@ import { DeleteDeviceDto } from './dto/delete-device.dto';
 export class DevicesController {
   constructor(private readonly deviceServices: DevicesService) {}
 
-  @Post()
-  createDevice(@Body() createDeviceDto: CreateDeviceDto) {
-    return this.deviceServices.createDevice(createDeviceDto);
-  }
-
-  @Get()
-  getAllDevices() {
-    return this.deviceServices.getAllDevices();
-  }
-
   @Get('/thermometers')
   getAllThermometers() {
     return this.deviceServices.getAllThermometers();
@@ -36,9 +26,19 @@ export class DevicesController {
     return this.deviceServices.getAllBlinds();
   }
 
+  @Post()
+  createDevice(@Body() createDeviceDto: CreateDeviceDto) {
+    return this.deviceServices.createDevice(createDeviceDto);
+  }
+
+  @Get()
+  getAllDevices() {
+    return this.deviceServices.getAllDevices();
+  }
+
   @Get(':id')
-  getOneDevices(@Param('id') id: string) {
-    return this.deviceServices.getOneDevices(id);
+  getOneDevice(@Param('id') id: string) {
+    return this.deviceServices.getOneDevice(id);
   }
 
   @Patch(':id')
