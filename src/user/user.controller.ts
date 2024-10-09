@@ -44,7 +44,7 @@ export class UserController {
     return this.userService.updateUser(id, updateUserDto);
   }
 
-  @Patch(':id')
+  @Patch(':id/verify')
   async createAndVerifyUser(
     @Param('id') id: string,
     @Body() createUserDto: CreateUserDto,
