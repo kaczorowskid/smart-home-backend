@@ -11,7 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
     EmailModule,
     JwtModule.register({
       secret: process.env.JWT_USER_CRETE_SECRET,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '5h' },
     }),
   ],
   controllers: [UserController],

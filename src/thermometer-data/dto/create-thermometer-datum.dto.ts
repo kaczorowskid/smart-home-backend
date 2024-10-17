@@ -7,4 +7,5 @@ export class CreateThermometerDatumDto
   humidity: number;
   date: string | Date;
   deviceId: string;
+  battery: number;
 }
