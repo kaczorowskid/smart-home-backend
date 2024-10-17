@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateThermometerDatumDto } from './dto/create-thermometer-datum.dto';
 import { DatabaseService } from 'src/database/database.service';
+import { mapValuesFromDevice } from './thermometer-data.mapper';
 
 @Injectable()
 export class ThermometerDataService {
@@ -10,7 +11,7 @@ export class ThermometerDataService {
     createThermometerDatumDto: CreateThermometerDatumDto,
   ) {
     return await this.databaseService.thermometerData.create({
-      data: createThermometerDatumDto,
+      data: mapValuesFromDevice(createThermometerDatumDto),
     });
   }
 

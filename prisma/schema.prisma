@@ -32,6 +32,7 @@ model ThermometerData {
   temperature Float
   humidity    Float
   date        DateTime
+  battery     Int
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   Thermometer Thermometer @relation(fields: [deviceId], references: [deviceId])
