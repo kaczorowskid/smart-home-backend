@@ -18,13 +18,14 @@ enum UserRole {
 }
 
 model Thermometer {
-  id        String            @id @default(uuid())
+  id        String               @id @default(uuid())
   name      String
-  deviceId  String            @unique
-  type      DeviceType        @default(THERMOMETER)
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  deviceId  String               @unique
+  type      DeviceType           @default(THERMOMETER)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
   data      ThermometerData[]
+  rooms     RoomOnThermometers[]
 }
 
 model ThermometerData {
@@ -40,13 +41,14 @@ model ThermometerData {
 }
 
 model Blind {
-  id        String     @id @default(uuid())
+  id        String         @id @default(uuid())
   name      String
-  value     Int?       @default(0)
-  deviceId  String     @unique
-  type      DeviceType @default(BLIND)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  value     Int?           @default(0)
+  deviceId  String         @unique
+  type      DeviceType     @default(BLIND)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  rooms     RoomOnBlinds[]
 }
 
 model User {
@@ -59,4 +61,30 @@ model User {
   isVerified Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Room {
+  id           String               @id @default(uuid())
+  name         String
+  image        String
+  thermometers RoomOnThermometers[]
+  blinds       RoomOnBlinds[]
+}
+
+model RoomOnThermometers {
+  roomId        String
+  thermometerId String
+  room          Room        @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  thermometer   Thermometer @relation(fields: [thermometerId], references: [id], onDelete: Cascade)
+
+  @@id([roomId, thermometerId])
+}
+
+model RoomOnBlinds {
+  roomId  String
+  blindId String
+  room    Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  blind   Blind  @relation(fields: [blindId], references: [id], onDelete: Cascade)
+
+  @@id([roomId, blindId])
 }
