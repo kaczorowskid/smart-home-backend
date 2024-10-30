@@ -9,6 +9,7 @@ import { BlindModule } from './blind/blind.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
+import { RoomModule } from './room/room.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EmailModule } from './email/email.module';
     UserModule,
     AuthModule,
     EmailModule,
+    RoomModule,
   ],
 })
 export class AppModule {}
