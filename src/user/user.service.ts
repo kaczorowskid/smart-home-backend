@@ -6,10 +6,13 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ConfigService } from '@nestjs/config';
+import { userCreateTokenExpiration } from 'src/constants/tokens-expiration.constants';
 
 @Injectable()
 export class UserService {
   constructor(
+    private readonly configService: ConfigService,
     private readonly databaseService: DatabaseService,
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
@@ -47,7 +50,13 @@ export class UserService {
       },
     });
 
-    const hashedEmail = this.jwtService.sign({ email: user.email });
+    const hashedEmail = this.jwtService.sign(
+      { email: user.email },
+      {
+        secret: this.configService.getOrThrow<string>('JWT_USER_CRETE_SECRET'),
+        expiresIn: userCreateTokenExpiration,
+      },
+    );
 
     this.emailService.sendMail(user.email, hashedEmail);
 

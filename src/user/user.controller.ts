@@ -26,12 +26,7 @@ export class UserController {
     return this.userService.getAllUsers();
   }
 
-  @Get(':email')
-  getOneUserByEmail(@Param('email') email: string) {
-    return this.userService.getOneUserByEmail(email);
-  }
-
-  @Get('/one/:id')
+  @Get(':id')
   getOneUserById(@Param('id') id: string) {
     return this.userService.getOneUserById(id);
   }
@@ -49,7 +44,7 @@ export class UserController {
     return this.userService.updateUser(id, updateUserDto);
   }
 
-  @Patch(':id/verify')
+  @Patch('/verify/:id')
   async createAndVerifyUser(
     @Param('id') id: string,
     @Body() createUserDto: CreateUserDto,

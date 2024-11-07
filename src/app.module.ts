@@ -20,7 +20,7 @@ import { RoomModule } from './room/room.module';
         },
       },
     }),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     DevicesModule,
     ThermometerModule,
