@@ -2,11 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
-import { LoginUserDto } from './dto/login-user.dto';
+import { User } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+import { accessTokenExpiration } from 'src/constants/tokens-expiration.constants';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly configService: ConfigService,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
@@ -22,11 +25,19 @@ export class AuthService {
     return user;
   }
 
-  async loginUser(loginUserDto: LoginUserDto) {
-    return this.jwtService.sign({ email: loginUserDto.email });
+  async loginUser(user: User) {
+    return this.jwtService.sign(
+      { id: user.id },
+      {
+        secret: this.configService.getOrThrow<string>(
+          'JWT_ACCESS_TOKEN_SECRET',
+        ),
+        expiresIn: accessTokenExpiration,
+      },
+    );
   }
 
-  async getUser(email: string) {
-    return await this.userService.getOneUserByEmail(email);
+  async getUserById(id: string) {
+    return await this.userService.getOneUserById(id);
   }
 }
