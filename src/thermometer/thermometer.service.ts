@@ -50,12 +50,18 @@ export class ThermometerService {
     });
   }
 
-  async getDataForGraph(id: string) {
+  async getDataForGraph(id: string, dateFrom: Date, dateTo: Date) {
     return await this.databaseService.thermometer.findUnique({
       where: { id },
       select: {
         name: true,
         data: {
+          where: {
+            date: {
+              gte: dateFrom,
+              lte: dateTo,
+            },
+          },
           select: {
             date: true,
             humidity: true,

@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { DevicesService } from './devices.service';
 import { CreateDeviceDto } from './dto/create-device.dto';
@@ -58,7 +59,11 @@ export class DevicesController {
   }
 
   @Get(':id/data')
-  getDataForGraph(@Param('id') id: string) {
-    return this.deviceServices.getDataForGraph(id);
+  getDataForGraph(
+    @Param('id') id: string,
+    @Query('dateFrom') dateFrom: Date,
+    @Query('dateTo') dateTo: Date,
+  ) {
+    return this.deviceServices.getDataForGraph(id, dateFrom, dateTo);
   }
 }

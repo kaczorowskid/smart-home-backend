@@ -23,9 +23,15 @@ export class UserService {
     });
   }
 
-  async getOneUser(email: string) {
+  async getOneUserByEmail(email: string) {
     return await this.databaseService.user.findUnique({
       where: { email },
+    });
+  }
+
+  async getOneUserById(id: string) {
+    return await this.databaseService.user.findUnique({
+      where: { id },
     });
   }
 
@@ -51,7 +57,7 @@ export class UserService {
   async getUserByToken(token: string) {
     const { email } = this.jwtService.decode(token);
 
-    return this.getOneUser(email);
+    return this.getOneUserByEmail(email);
   }
 
   async createAndVerifyUser(id: string, createUserDto: CreateUserDto) {
