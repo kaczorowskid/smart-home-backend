@@ -8,8 +8,8 @@ import helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));
-  app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
+  app.use(cookieParser());
 
   app.enableCors({
     origin: 'http://localhost:5173',

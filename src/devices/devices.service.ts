@@ -69,7 +69,7 @@ export class DevicesService {
     return thermometers || blinds;
   }
 
-  async getDataForGraph(id: string) {
-    return await this.thermometerService.getDataForGraph(id);
+  async getDataForGraph(id: string, dateFrom: Date, dateTo: Date) {
+    return await this.thermometerService.getDataForGraph(id, dateFrom, dateTo);
   }
 }

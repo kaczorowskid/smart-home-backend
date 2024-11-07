@@ -27,8 +27,13 @@ export class UserController {
   }
 
   @Get(':email')
-  getOneUser(@Param('email') email: string) {
-    return this.userService.getOneUser(email);
+  getOneUserByEmail(@Param('email') email: string) {
+    return this.userService.getOneUserByEmail(email);
+  }
+
+  @Get('/one/:id')
+  getOneUserById(@Param('id') id: string) {
+    return this.userService.getOneUserById(id);
   }
 
   @Delete(':id')
