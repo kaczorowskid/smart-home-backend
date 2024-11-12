@@ -5,12 +5,6 @@ import { Request } from 'express';
 import { AuthService } from '../auth.service';
 import { ConfigService } from '@nestjs/config';
 
-type JwtPayload = {
-  id: string;
-  iat: number;
-  exp: number;
-};
-
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -20,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
-          let data = request?.cookies?.['auth-token'];
+          let data = request?.cookies?.['access-token'];
 
           if (!data) {
             throw new UnauthorizedException();
