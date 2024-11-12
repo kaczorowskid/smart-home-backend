@@ -7,4 +7,5 @@ export class CreateUserDto implements Prisma.UserCreateInput {
   password: string;
   isVerified?: boolean;
   role?: $Enums.UserRole;
+  refreshToken?: string;
 }
