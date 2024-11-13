@@ -17,6 +17,14 @@ enum UserRole {
   ADMIN
 }
 
+enum RoomType {
+  BACKYARD
+  BATHROOM
+  BEDROOM
+  KITCHEN
+  LIVINGROOM
+}
+
 model Thermometer {
   id        String               @id @default(uuid())
   name      String
@@ -67,7 +75,7 @@ model User {
 model Room {
   id           String               @id @default(uuid())
   name         String
-  image        String
+  roomType     RoomType
   thermometers RoomOnThermometers[]
   blinds       RoomOnBlinds[]
 }

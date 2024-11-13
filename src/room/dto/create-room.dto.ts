@@ -1,9 +1,9 @@
-import { Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 
 export class CreateRoomDto
   implements Omit<Prisma.RoomCreateInput, 'blinds' | 'thermometers'>
 {
-  image: string;
+  roomType: $Enums.RoomType;
   name: string;
   blinds: {
     id: string;
