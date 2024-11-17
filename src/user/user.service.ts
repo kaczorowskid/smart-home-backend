@@ -69,13 +69,13 @@ export class UserService {
     return this.getOneUserByEmail(email);
   }
 
-  async createAndVerifyUser(id: string, createUserDto: CreateUserDto) {
-    const passwordHash = await bcrypt.hash(createUserDto.password, 10);
+  async verifyUser(id: string, udpateUserDto: UpdateUserDto) {
+    const passwordHash = await bcrypt.hash(udpateUserDto.password, 10);
 
     return await this.databaseService.user.update({
       where: { id },
       data: {
-        ...createUserDto,
+        ...udpateUserDto,
         password: passwordHash,
         isVerified: true,
       },

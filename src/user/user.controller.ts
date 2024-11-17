@@ -45,11 +45,11 @@ export class UserController {
   }
 
   @Patch('/verify/:id')
-  async createAndVerifyUser(
+  async verifyUser(
     @Param('id') id: string,
-    @Body() createUserDto: CreateUserDto,
+    @Body() udpateUserDto: UpdateUserDto,
   ) {
-    return this.userService.createAndVerifyUser(id, createUserDto);
+    return this.userService.verifyUser(id, udpateUserDto);
   }
 
   @Get('/token/:token')
