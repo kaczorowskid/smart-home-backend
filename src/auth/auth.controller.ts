@@ -37,7 +37,6 @@ export class AuthController {
     return restUser;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/logout')
   async logoutUser(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access-token').clearCookie('refresh-token');
