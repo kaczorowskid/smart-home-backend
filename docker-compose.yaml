@@ -32,7 +32,7 @@ services:
     networks:
       - backend-network
     ports:
-      - 41679:4200
+      - 41679:3001
 
 volumes:
   postgres_data:
