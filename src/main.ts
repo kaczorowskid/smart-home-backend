@@ -4,6 +4,7 @@ import { Logger } from 'nestjs-pino';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -11,9 +12,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
+  const configService = app.get(ConfigService);
+
   app.enableCors({
-    origin: ['http://frog01.mikr.us:31679', 'http://localhost:5173'],
     credentials: true,
+    origin: configService.get<string>('CORS_ORIGIN')
+      ? configService.get<string>('CORS_ORIGIN').split(',')
+      : ['http://localhost:5173'],
   });
 
   app.use(helmet());
