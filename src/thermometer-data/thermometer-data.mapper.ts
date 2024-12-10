@@ -4,6 +4,6 @@ export const mapValuesFromDevice = (
   thermometerData: ThermometerData,
 ): ThermometerData => ({
   ...thermometerData,
-  temperature: Number(thermometerData.temperature.toFixed(2)),
-  humidity: Number(thermometerData.humidity.toFixed(2)),
+  temperature: Number(thermometerData.temperature.toFixed(1)),
+  humidity: Number(thermometerData.humidity.toFixed(1)),
 });
