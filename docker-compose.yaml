@@ -27,6 +27,10 @@ services:
       EMAIL_SERVICE: ${EMAIL_SERVICE}
       EMAIL_USERNAME: ${EMAIL_USERNAME}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      BACKEND_IMAGE: ${BACKEND_IMAGE}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      NODE_ENV: ${NODE_ENV}
+      MQTT_BROKER_URL: ${MQTT_BROKER_URL}
     depends_on:
       - postgres
     networks:
@@ -40,3 +44,4 @@ volumes:
 networks:
   backend-network:
     driver: bridge
+    name: backend-network

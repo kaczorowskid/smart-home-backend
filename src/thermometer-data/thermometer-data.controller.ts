@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ThermometerDataService } from './thermometer-data.service';
 import { CreateThermometerDatumDto } from './dto/create-thermometer-datum.dto';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { sensorsTopics } from 'src/constants/sensors-topics.constants';
 
 @Controller('thermometer-data')
 export class ThermometerDataController {
@@ -8,9 +10,9 @@ export class ThermometerDataController {
     private readonly thermometerDataService: ThermometerDataService,
   ) {}
 
-  @Post()
+  @EventPattern(sensorsTopics.thermometerData)
   createThermometerDatum(
-    @Body() createThermometerDatumDto: CreateThermometerDatumDto,
+    @Payload() createThermometerDatumDto: CreateThermometerDatumDto,
   ) {
     return this.thermometerDataService.createThermometerDatum(
       createThermometerDatumDto,
