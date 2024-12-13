@@ -25,9 +25,18 @@ export class AuthController {
     return restUser;
   }
 
-  @UseGuards(JwtRefreshAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/authorize')
   async getUser(
+    @CurrentUser() user: User,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return user;
+  }
+
+  @UseGuards(JwtRefreshAuthGuard)
+  @Get('/refresh')
+  async refreshUser(
     @CurrentUser() user: User,
     @Res({ passthrough: true }) res: Response,
   ) {
@@ -37,6 +46,7 @@ export class AuthController {
     return restUser;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/logout')
   async logoutUser(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access-token').clearCookie('refresh-token');

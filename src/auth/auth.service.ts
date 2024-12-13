@@ -21,12 +21,12 @@ export class AuthService {
 
   async authUser(user: User, response: Response) {
     const expiresAccessToken = new Date();
-    expiresAccessToken.setMilliseconds(
+    expiresAccessToken.setTime(
       expiresAccessToken.getTime() + accessTokenExpirationMs,
     );
 
     const expiresRefreshToken = new Date();
-    expiresRefreshToken.setMilliseconds(
+    expiresRefreshToken.setTime(
       expiresRefreshToken.getTime() + refreshTokenExpirationMs,
     );
 
@@ -51,13 +51,13 @@ export class AuthService {
 
     response.cookie('access-token', accessToken, {
       httpOnly: true,
-      secure: this.configService.get('NODE_ENV') === 'production',
+      secure: this.configService.get('NODE_ENV') !== 'dev',
       expires: expiresAccessToken,
     });
 
     response.cookie('refresh-token', refreshToken, {
       httpOnly: true,
-      secure: this.configService.get('NODE_ENV') === 'production',
+      secure: this.configService.get('NODE_ENV') !== 'dev',
       expires: expiresRefreshToken,
     });
   }

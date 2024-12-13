@@ -6,36 +6,42 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CretaeUserByAdminDto } from './dto/create-user-by-admin.dto';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async createUser(@Body() createUserByAdminDto: CretaeUserByAdminDto) {
     return this.userService.createUserByAdmin(createUserByAdminDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   getAllUsers() {
     return this.userService.getAllUsers();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   getOneUserById(@Param('id') id: string) {
     return this.userService.getOneUserById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
     return this.userService.deleteUser(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async updateUser(
     @Param('id') id: string,

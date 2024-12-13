@@ -53,5 +53,6 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd app
+            docker-compose --env-file ../envs/smart-house/.env.production.backend down
             docker-compose --env-file ../envs/smart-house/.env.production.backend pull
             docker-compose --env-file ../envs/smart-house/.env.production.backend up -d
