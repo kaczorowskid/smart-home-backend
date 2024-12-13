@@ -8,7 +8,7 @@ export class BlindService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async createBlind(createBlindDto: CreateBlindDto) {
-    return this.databaseService.blind.create({
+    return await this.databaseService.blind.create({
       data: createBlindDto,
     });
   }

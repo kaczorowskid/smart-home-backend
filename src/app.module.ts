@@ -10,8 +10,16 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { RoomModule } from './room/room.module';
+import { APP_FILTER } from '@nestjs/core';
+import { PrismaExceptionFilter } from './common/exceptions/prisma-exceptions.filter';
 
 @Module({
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: PrismaExceptionFilter,
+    },
+  ],
   imports: [
     LoggerModule.forRoot({
       pinoHttp: {
