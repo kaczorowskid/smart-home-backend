@@ -14,8 +14,10 @@ import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
 import { DeleteDeviceDto } from './dto/delete-device.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { IsAdminGuard } from 'src/auth/guards/is-admin.guard';
+import { IsAdmin } from 'src/auth/decorators/is-admin.decorator';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, IsAdminGuard)
 @Controller('devices')
 export class DevicesController {
   constructor(private readonly deviceServices: DevicesService) {}
@@ -30,6 +32,7 @@ export class DevicesController {
     return this.deviceServices.getAllBlinds();
   }
 
+  @IsAdmin()
   @Post()
   createDevice(@Body() createDeviceDto: CreateDeviceDto) {
     return this.deviceServices.createDevice(createDeviceDto);
@@ -45,6 +48,7 @@ export class DevicesController {
     return this.deviceServices.getOneDevice(id);
   }
 
+  @IsAdmin()
   @Patch(':id')
   updateDevice(
     @Param('id') id: string,
@@ -53,6 +57,7 @@ export class DevicesController {
     return this.deviceServices.updateDevice(id, updateBlindDto);
   }
 
+  @IsAdmin()
   @Delete(':id')
   deleteDevice(
     @Param('id') id: string,

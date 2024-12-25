@@ -12,12 +12,15 @@ import { UserService } from './user.service';
 import { CretaeUserByAdminDto } from './dto/create-user-by-admin.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { IsAdminGuard } from 'src/auth/guards/is-admin.guard';
+import { IsAdmin } from 'src/auth/decorators/is-admin.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, IsAdminGuard)
+  @IsAdmin()
   @Post()
   async createUser(@Body() createUserByAdminDto: CretaeUserByAdminDto) {
     return this.userService.createUserByAdmin(createUserByAdminDto);
@@ -35,13 +38,15 @@ export class UserController {
     return this.userService.getOneUserById(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, IsAdminGuard)
+  @IsAdmin()
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
     return this.userService.deleteUser(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, IsAdminGuard)
+  @IsAdmin()
   @Patch(':id')
   async updateUser(
     @Param('id') id: string,
