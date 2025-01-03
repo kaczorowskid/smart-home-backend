@@ -3,5 +3,5 @@ import { CreateUserDto } from './create-user.dto';
 
 export class CretaeUserByAdminDto extends PickType(CreateUserDto, [
   'email',
-  'role',
+  'roleId',
 ]) {}

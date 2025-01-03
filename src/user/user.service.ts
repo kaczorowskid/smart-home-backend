@@ -4,7 +4,6 @@ import { EmailService } from 'src/email/email.service';
 import { CretaeUserByAdminDto } from './dto/create-user-by-admin.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { userCreateTokenExpiration } from 'src/constants/tokens-expiration.constants';
@@ -23,18 +22,39 @@ export class UserService {
       orderBy: {
         createdAt: 'asc',
       },
+      include: {
+        role: {
+          include: {
+            permissions: true,
+          },
+        },
+      },
     });
   }
 
   async getOneUserByEmail(email: string) {
     return await this.databaseService.user.findUnique({
       where: { email },
+      include: {
+        role: {
+          include: {
+            permissions: true,
+          },
+        },
+      },
     });
   }
 
   async getOneUserById(id: string) {
     return await this.databaseService.user.findUnique({
       where: { id },
+      include: {
+        role: {
+          include: {
+            permissions: true,
+          },
+        },
+      },
     });
   }
 
@@ -46,7 +66,7 @@ export class UserService {
         surname: '',
         isVerified: false,
         email: createUserByAdminDto.email,
-        role: createUserByAdminDto.role,
+        roleId: createUserByAdminDto.roleId,
       },
     });
 
@@ -92,6 +112,14 @@ export class UserService {
     return await this.databaseService.user.update({
       where: { id },
       data: updateUserDto,
+    });
+  }
+
+  async getAllRoles() {
+    return await this.databaseService.role.findMany({
+      include: {
+        permissions: true,
+      },
     });
   }
 }
