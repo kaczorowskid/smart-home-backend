@@ -12,6 +12,7 @@ import { EmailModule } from './email/email.module';
 import { RoomModule } from './room/room.module';
 import { APP_FILTER } from '@nestjs/core';
 import { PrismaExceptionFilter } from './common/exceptions/prisma-exceptions.filter';
+import { RoleModule } from './role/role.module';
 
 @Module({
   providers: [
@@ -38,6 +39,7 @@ import { PrismaExceptionFilter } from './common/exceptions/prisma-exceptions.fil
     AuthModule,
     EmailModule,
     RoomModule,
+    RoleModule,
   ],
 })
 export class AppModule {}

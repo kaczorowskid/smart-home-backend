@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -12,9 +13,28 @@ enum DeviceType {
   BLIND
 }
 
-enum UserRole {
-  USER
-  ADMIN
+enum PermissionType {
+  DASHBOARD_VIEW
+  GRAPHS_VIEW
+  ROOMS_VIEW
+  OPTIONS_VIEW
+  OPTIONS_VIEW_DEVICES
+  OPTIONS_ADD_DEVICE
+  OPTIONS_UPDATE_DEVICE
+  OPTIONS_DELETE_DEVICE
+  OPTIONS_VIEW_ROOMS
+  OPTIONS_ADD_ROOM
+  OPTIONS_UPDATE_ROOM
+  OPTIONS_DELETE_ROOM
+  OPTIONS_VIEW_USERS
+  OPTIONS_ADD_USER
+  OPTIONS_UPDATE_USER
+  OPTIONS_DELETE_USER
+  OPTIONS_VIEW_ROLES
+  OPTIONS_ADD_ROLE
+  OPTIONS_UPDATE_ROLE
+  OPTIONS_DELETE_ROLE
+  SETTINGS_VIEW
 }
 
 enum RoomType {
@@ -65,11 +85,29 @@ model User {
   surname      String
   email        String   @unique
   password     String
-  role         UserRole @default(USER)
   isVerified   Boolean  @default(false)
   refreshToken String?
+  roleId       String
+  role         Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Role {
+  id          String               @id @default(uuid())
+  name        String               @unique
+  permissions RolePermissionLink[]
+  User        User[]
+}
+
+model RolePermissionLink {
+  id         String         @id @default(uuid())
+  roleId     String
+  permission PermissionType
+
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permission])
 }
 
 model Room {

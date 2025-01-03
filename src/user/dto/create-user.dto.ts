@@ -1,11 +1,11 @@
-import { $Enums, Prisma } from '@prisma/client';
-import { IsBoolean, IsEmail, IsEnum, IsJWT } from 'class-validator';
+import { Prisma } from '@prisma/client';
+import { IsBoolean, IsEmail, IsJWT, IsUUID } from 'class-validator';
 import {
   IsName,
   IsPassword,
 } from 'src/common/validations/validations.decorators';
 
-export class CreateUserDto implements Prisma.UserCreateInput {
+export class CreateUserDto implements Omit<Prisma.UserCreateInput, 'role'> {
   @IsName()
   name: string;
 
@@ -21,8 +21,8 @@ export class CreateUserDto implements Prisma.UserCreateInput {
   @IsBoolean()
   isVerified?: boolean;
 
-  @IsEnum($Enums.UserRole)
-  role?: $Enums.UserRole;
+  @IsUUID()
+  roleId: string;
 
   @IsJWT()
   refreshToken?: string;
