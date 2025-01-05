@@ -31,7 +31,9 @@ export class AuthController {
     @CurrentUser() user: User,
     @Res({ passthrough: true }) res: Response,
   ) {
-    return user;
+    const { password, refreshToken, ...restUser } = user;
+
+    return restUser;
   }
 
   @UseGuards(JwtRefreshAuthGuard)
