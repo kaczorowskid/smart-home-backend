@@ -14,10 +14,11 @@ import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
 import { DeleteDeviceDto } from './dto/delete-device.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { IsAdminGuard } from 'src/auth/guards/is-admin.guard';
-import { IsAdmin } from 'src/auth/decorators/is-admin.decorator';
+import { PermissionsGuard } from 'src/auth/guards/permissions.guard';
+import { HasPermission } from 'src/auth/decorators/has-permission.decorator';
+import { PermissionType } from '@prisma/client';
 
-@UseGuards(JwtAuthGuard, IsAdminGuard)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('devices')
 export class DevicesController {
   constructor(private readonly deviceServices: DevicesService) {}
@@ -32,23 +33,38 @@ export class DevicesController {
     return this.deviceServices.getAllBlinds();
   }
 
-  @IsAdmin()
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
+  @Get('/data/:id')
+  getDataForGraph(
+    @Param('id') id: string,
+    @Query('dateFrom') dateFrom: Date,
+    @Query('dateTo') dateTo: Date,
+  ) {
+    return this.deviceServices.getDataForGraph(id, dateFrom, dateTo);
+  }
+
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_ADD_DEVICE])
   @Post()
   createDevice(@Body() createDeviceDto: CreateDeviceDto) {
     return this.deviceServices.createDevice(createDeviceDto);
   }
 
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
   @Get()
   getAllDevices() {
     return this.deviceServices.getAllDevices();
   }
 
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
   @Get(':id')
   getOneDevice(@Param('id') id: string) {
     return this.deviceServices.getOneDevice(id);
   }
 
-  @IsAdmin()
+  @HasPermission([
+    PermissionType.IS_ADMIN,
+    PermissionType.OPTIONS_UPDATE_DEVICE,
+  ])
   @Patch(':id')
   updateDevice(
     @Param('id') id: string,
@@ -57,21 +73,15 @@ export class DevicesController {
     return this.deviceServices.updateDevice(id, updateBlindDto);
   }
 
-  @IsAdmin()
+  @HasPermission([
+    PermissionType.IS_ADMIN,
+    PermissionType.OPTIONS_DELETE_DEVICE,
+  ])
   @Delete(':id')
   deleteDevice(
     @Param('id') id: string,
     @Body() deleteDeviceDto: DeleteDeviceDto,
   ) {
     return this.deviceServices.deleteDevice(id, deleteDeviceDto);
-  }
-
-  @Get(':id/data')
-  getDataForGraph(
-    @Param('id') id: string,
-    @Query('dateFrom') dateFrom: Date,
-    @Query('dateTo') dateTo: Date,
-  ) {
-    return this.deviceServices.getDataForGraph(id, dateFrom, dateTo);
   }
 }
