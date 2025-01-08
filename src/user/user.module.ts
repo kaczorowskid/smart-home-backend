@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { DatabaseModule } from 'src/database/database.module';
-import { UserController } from './user.controller';
-import { EmailModule } from 'src/email/email.module';
 import { JwtModule } from '@nestjs/jwt';
+import { EmailModule } from 'src/email/email.module';
+import { DatabaseModule } from 'src/database/database.module';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 
 @Module({
-  imports: [DatabaseModule, EmailModule, JwtModule],
-  controllers: [UserController],
-  providers: [UserService],
   exports: [UserService],
+  providers: [UserService],
+  controllers: [UserController],
+  imports: [DatabaseModule, EmailModule, JwtModule],
 })
 export class UserModule {}

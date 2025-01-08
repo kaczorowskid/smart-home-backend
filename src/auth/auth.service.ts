@@ -1,15 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
 import { User } from '@prisma/client';
+import { hash, compare } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { UserService } from 'src/user/user.service';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   accessTokenExpirationMs,
   refreshTokenExpirationMs,
 } from 'src/constants/tokens-expiration.constants';
-import { Response } from 'express';
-import { hash, compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -19,47 +19,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async authUser(user: User, response: Response) {
-    const expiresAccessToken = new Date();
-    expiresAccessToken.setTime(
-      expiresAccessToken.getTime() + accessTokenExpirationMs,
-    );
-
-    const expiresRefreshToken = new Date();
-    expiresRefreshToken.setTime(
-      expiresRefreshToken.getTime() + refreshTokenExpirationMs,
-    );
-
-    const accessToken = this.jwtService.sign(
-      { id: user.id },
-      {
-        secret: this.configService.getOrThrow('JWT_ACCESS_TOKEN_SECRET'),
-        expiresIn: `${accessTokenExpirationMs}ms`,
-      },
-    );
-    const refreshToken = this.jwtService.sign(
-      { id: user.id },
-      {
-        secret: this.configService.getOrThrow('JWT_REFRESH_TOKEN_SECRET'),
-        expiresIn: `${refreshTokenExpirationMs}ms`,
-      },
-    );
-
-    await this.userService.updateUser(user.id, {
-      refreshToken: await hash(refreshToken, 10),
-    });
-
-    response.cookie('access-token', accessToken, {
-      httpOnly: true,
-      secure: this.configService.get('NODE_ENV') !== 'dev',
-      expires: expiresAccessToken,
-    });
-
-    response.cookie('refresh-token', refreshToken, {
-      httpOnly: true,
-      secure: this.configService.get('NODE_ENV') !== 'dev',
-      expires: expiresRefreshToken,
-    });
+  async getUserById(id: string) {
+    return await this.userService.getOneUserById(id);
   }
 
   async validateUser(email: string, password: string) {
@@ -92,7 +53,46 @@ export class AuthService {
     }
   }
 
-  async getUserById(id: string) {
-    return await this.userService.getOneUserById(id);
+  async authUser(user: User, response: Response) {
+    const expiresAccessToken = new Date();
+    expiresAccessToken.setTime(
+      expiresAccessToken.getTime() + accessTokenExpirationMs,
+    );
+
+    const expiresRefreshToken = new Date();
+    expiresRefreshToken.setTime(
+      expiresRefreshToken.getTime() + refreshTokenExpirationMs,
+    );
+
+    const accessToken = this.jwtService.sign(
+      { id: user.id },
+      {
+        expiresIn: `${accessTokenExpirationMs}ms`,
+        secret: this.configService.getOrThrow('JWT_ACCESS_TOKEN_SECRET'),
+      },
+    );
+    const refreshToken = this.jwtService.sign(
+      { id: user.id },
+      {
+        expiresIn: `${refreshTokenExpirationMs}ms`,
+        secret: this.configService.getOrThrow('JWT_REFRESH_TOKEN_SECRET'),
+      },
+    );
+
+    await this.userService.updateUser(user.id, {
+      refreshToken: await hash(refreshToken, 10),
+    });
+
+    response.cookie('access-token', accessToken, {
+      httpOnly: true,
+      expires: expiresAccessToken,
+      secure: this.configService.get('NODE_ENV') !== 'dev',
+    });
+
+    response.cookie('refresh-token', refreshToken, {
+      httpOnly: true,
+      expires: expiresRefreshToken,
+      secure: this.configService.get('NODE_ENV') !== 'dev',
+    });
   }
 }

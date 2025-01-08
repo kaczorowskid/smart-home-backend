@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
+import { DatabaseModule } from 'src/database/database.module';
+import { Transport, ClientsModule } from '@nestjs/microservices';
 import { ThermometerDataService } from './thermometer-data.service';
 import { ThermometerDataController } from './thermometer-data.controller';
-import { DatabaseModule } from 'src/database/database.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
+  providers: [ThermometerDataService],
+  controllers: [ThermometerDataController],
   imports: [
     DatabaseModule,
     ClientsModule.register([
@@ -17,7 +19,5 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       },
     ]),
   ],
-  controllers: [ThermometerDataController],
-  providers: [ThermometerDataService],
 })
 export class ThermometerDataModule {}

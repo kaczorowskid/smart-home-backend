@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ThermometerService } from './thermometer.service';
 import { DatabaseModule } from 'src/database/database.module';
+import { ThermometerService } from './thermometer.service';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [ThermometerService],
   exports: [ThermometerService],
+  providers: [ThermometerService],
 })
 export class ThermometerModule {}

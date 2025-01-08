@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { IsBoolean, IsEmail, IsJWT, IsUUID } from 'class-validator';
+import { IsJWT, IsUUID, IsEmail, IsBoolean } from 'class-validator';
 import {
   IsName,
   IsPassword,
@@ -9,21 +9,21 @@ export class CreateUserDto implements Omit<Prisma.UserCreateInput, 'role'> {
   @IsName()
   name: string;
 
-  @IsName()
-  surname: string;
-
   @IsEmail()
   email: string;
-
-  @IsPassword()
-  password: string;
-
-  @IsBoolean()
-  isVerified?: boolean;
 
   @IsUUID()
   roleId: string;
 
+  @IsName()
+  surname: string;
+
+  @IsPassword()
+  password: string;
+
   @IsJWT()
   refreshToken?: string;
+
+  @IsBoolean()
+  isVerified?: boolean;
 }

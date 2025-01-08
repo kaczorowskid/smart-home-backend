@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class EmailService {
@@ -14,10 +14,10 @@ export class EmailService {
     const message = `Verify your account by clicking this link:<br /> <a href="${linkHref}">${linkHref}</a>`;
 
     const email = await this.mailService.sendMail({
-      from: 'test@test.com',
       to,
-      subject: `How to Send Emails with Nodemailer`,
       html: message,
+      from: 'contact@smart-home.org.pl',
+      subject: `Activate your account in the Smart Home App`,
     });
 
     return email;

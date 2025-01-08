@@ -1,6 +1,6 @@
-import { $Enums, Prisma } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsArray, IsEnum, IsString, IsUUID } from 'class-validator';
+import { $Enums, Prisma } from '@prisma/client';
+import { IsEnum, IsUUID, IsArray } from 'class-validator';
 import { IsName } from 'src/common/validations/validations.decorators';
 
 class ConnectedDevice {
@@ -11,11 +11,11 @@ class ConnectedDevice {
 export class CreateRoomDto
   implements Omit<Prisma.RoomCreateInput, 'blinds' | 'thermometers'>
 {
-  @IsEnum($Enums.RoomType)
-  roomType: $Enums.RoomType;
-
   @IsName()
   name: string;
+
+  @IsEnum($Enums.RoomType)
+  roomType: $Enums.RoomType;
 
   @IsArray()
   @Type(() => ConnectedDevice)

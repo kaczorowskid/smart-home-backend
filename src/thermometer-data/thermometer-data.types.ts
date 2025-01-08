@@ -1,7 +1,7 @@
 export type ThermometerData = {
-  temperature: number;
-  humidity: number;
-  date: string | Date;
-  deviceId: string;
   battery: number;
+  humidity: number;
+  deviceId: string;
+  temperature: number;
+  date: Date | string;
 };
