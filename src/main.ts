@@ -1,11 +1,11 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { Logger } from 'nestjs-pino';
-import { ValidationPipe } from '@nestjs/common';
-import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { Logger } from 'nestjs-pino';
+import { NestFactory } from '@nestjs/core';
+import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ValidationPipe } from '@nestjs/common';
+import { Transport, type MicroserviceOptions } from '@nestjs/microservices';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });

@@ -1,4 +1,4 @@
-import { $Enums, Prisma } from '@prisma/client';
+import { type $Enums, type Prisma } from '@prisma/client';
 
 export class CreateRoleDto
   implements Omit<Prisma.RoleCreateInput, 'permissions'>

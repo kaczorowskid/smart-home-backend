@@ -12,6 +12,35 @@ export class DevicesService {
     private readonly blindService: BlindService,
   ) {}
 
+  async getAllBlinds() {
+    return await this.blindService.getAllBlinds();
+  }
+
+  async getAllThermometers() {
+    return await this.thermometerService.getAllThermometers();
+  }
+
+  async getDataForGraph(id: string, dateFrom: Date, dateTo: Date) {
+    return await this.thermometerService.getDataForGraph(id, dateFrom, dateTo);
+  }
+
+  async getOneDevice(id: string) {
+    const [thermometers, blinds] = await Promise.all([
+      this.thermometerService.getOneThermometer(id),
+      this.blindService.getOneBlind(id),
+    ]);
+
+    return thermometers || blinds;
+  }
+
+  async deleteDevice(id: string, deleteDeviceDto: DeleteDeviceDto) {
+    if (deleteDeviceDto.type === 'BLIND') {
+      return await this.blindService.deleteBlind(id);
+    } else {
+      return await this.thermometerService.deleteThermometer(id);
+    }
+  }
+
   async createDevice(createDeviceDto: CreateDeviceDto) {
     if (createDeviceDto.type === 'BLIND') {
       return await this.blindService.createBlind(createDeviceDto);
@@ -31,14 +60,6 @@ export class DevicesService {
     }
   }
 
-  async deleteDevice(id: string, deleteDeviceDto: DeleteDeviceDto) {
-    if (deleteDeviceDto.type === 'BLIND') {
-      return await this.blindService.deleteBlind(id);
-    } else {
-      return await this.thermometerService.deleteThermometer(id);
-    }
-  }
-
   async getAllDevices() {
     const [thermometers, blinds] = await Promise.all([
       this.thermometerService.getAllThermometers(),
@@ -50,26 +71,5 @@ export class DevicesService {
     return allDevices.sort(
       (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
     );
-  }
-
-  async getAllThermometers() {
-    return await this.thermometerService.getAllThermometers();
-  }
-
-  async getAllBlinds() {
-    return await this.blindService.getAllBlinds();
-  }
-
-  async getOneDevice(id: string) {
-    const [thermometers, blinds] = await Promise.all([
-      this.thermometerService.getOneThermometer(id),
-      this.blindService.getOneBlind(id),
-    ]);
-
-    return thermometers || blinds;
-  }
-
-  async getDataForGraph(id: string, dateFrom: Date, dateTo: Date) {
-    return await this.thermometerService.getDataForGraph(id, dateFrom, dateTo);
   }
 }

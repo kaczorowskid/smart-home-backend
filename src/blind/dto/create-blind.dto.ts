@@ -1,8 +1,8 @@
+import { IsEnum } from 'class-validator';
 import { $Enums, Prisma } from '@prisma/client';
-import { IsEnum, IsString } from 'class-validator';
 import {
-  IsDeviceId,
   IsName,
+  IsDeviceId,
 } from 'src/common/validations/validations.decorators';
 
 export class CreateBlindDto implements Prisma.BlindCreateInput {

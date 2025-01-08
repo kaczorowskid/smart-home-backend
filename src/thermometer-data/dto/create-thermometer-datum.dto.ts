@@ -10,18 +10,18 @@ import {
 export class CreateThermometerDatumDto
   implements Omit<Prisma.ThermometerDataCreateInput, 'Thermometer'>
 {
-  @IsTemperature()
-  temperature: number;
+  @IsBattery()
+  battery: number;
 
   @IsHumidity()
   humidity: number;
 
-  @IsDateString()
-  date: string | Date;
-
   @IsDeviceId()
   deviceId: string;
 
-  @IsBattery()
-  battery: number;
+  @IsDateString()
+  date: Date | string;
+
+  @IsTemperature()
+  temperature: number;
 }

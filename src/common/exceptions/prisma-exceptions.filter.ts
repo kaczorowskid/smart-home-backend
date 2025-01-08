@@ -1,10 +1,10 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpStatus,
-} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import {
+  Catch,
+  HttpStatus,
+  ArgumentsHost,
+  ExceptionFilter,
+} from '@nestjs/common';
 
 @Catch(Prisma.PrismaClientKnownRequestError)
 export class PrismaExceptionFilter implements ExceptionFilter {
@@ -88,10 +88,10 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     }
 
     response.status(status).json({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      prismaCode: exception.code,
       message,
+      statusCode: status,
+      prismaCode: exception.code,
+      timestamp: new Date().toISOString(),
     });
   }
 }

@@ -10,15 +10,15 @@ export const deviceId = {
 
 export const password = {
   minLength: 3,
-  minLowercase: 1,
   minNumbers: 1,
   minSymbols: 1,
+  minLowercase: 1,
   minUppercase: 1,
 };
 
 export const temperature = {
-  min: -50,
   max: 50,
+  min: -50,
 };
 
 export const humidity = {

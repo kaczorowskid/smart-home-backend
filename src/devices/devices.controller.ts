@@ -1,71 +1,61 @@
+import { PermissionType } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from 'src/auth/guards/permissions.guard';
+import { HasPermission } from 'src/auth/decorators/has-permission.decorator';
 import {
-  Controller,
+  Get,
   Post,
   Body,
   Patch,
-  Get,
   Param,
-  Delete,
   Query,
+  Delete,
   UseGuards,
+  Controller,
 } from '@nestjs/common';
 import { DevicesService } from './devices.service';
 import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
 import { DeleteDeviceDto } from './dto/delete-device.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { PermissionsGuard } from 'src/auth/guards/permissions.guard';
-import { HasPermission } from 'src/auth/decorators/has-permission.decorator';
-import { PermissionType } from '@prisma/client';
 
-@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('devices')
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class DevicesController {
   constructor(private readonly deviceServices: DevicesService) {}
-
-  @Get('/thermometers')
-  getAllThermometers() {
-    return this.deviceServices.getAllThermometers();
-  }
 
   @Get('/blinds')
   getAllBlinds() {
     return this.deviceServices.getAllBlinds();
   }
 
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
-  @Get('/data/:id')
-  getDataForGraph(
-    @Param('id') id: string,
-    @Query('dateFrom') dateFrom: Date,
-    @Query('dateTo') dateTo: Date,
-  ) {
-    return this.deviceServices.getDataForGraph(id, dateFrom, dateTo);
+  @Get('/thermometers')
+  getAllThermometers() {
+    return this.deviceServices.getAllThermometers();
   }
 
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_ADD_DEVICE])
-  @Post()
-  createDevice(@Body() createDeviceDto: CreateDeviceDto) {
-    return this.deviceServices.createDevice(createDeviceDto);
-  }
-
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
   @Get()
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
   getAllDevices() {
     return this.deviceServices.getAllDevices();
   }
 
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
   @Get(':id')
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
   getOneDevice(@Param('id') id: string) {
     return this.deviceServices.getOneDevice(id);
   }
 
+  @Post()
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_ADD_DEVICE])
+  createDevice(@Body() createDeviceDto: CreateDeviceDto) {
+    return this.deviceServices.createDevice(createDeviceDto);
+  }
+
+  @Patch(':id')
   @HasPermission([
     PermissionType.IS_ADMIN,
     PermissionType.OPTIONS_UPDATE_DEVICE,
   ])
-  @Patch(':id')
   updateDevice(
     @Param('id') id: string,
     @Body() updateBlindDto: UpdateDeviceDto,
@@ -73,15 +63,25 @@ export class DevicesController {
     return this.deviceServices.updateDevice(id, updateBlindDto);
   }
 
+  @Delete(':id')
   @HasPermission([
     PermissionType.IS_ADMIN,
     PermissionType.OPTIONS_DELETE_DEVICE,
   ])
-  @Delete(':id')
   deleteDevice(
     @Param('id') id: string,
     @Body() deleteDeviceDto: DeleteDeviceDto,
   ) {
     return this.deviceServices.deleteDevice(id, deleteDeviceDto);
+  }
+
+  @Get('/data/:id')
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_VIEW_DEVICES])
+  getDataForGraph(
+    @Param('id') id: string,
+    @Query('dateFrom') dateFrom: Date,
+    @Query('dateTo') dateTo: Date,
+  ) {
+    return this.deviceServices.getDataForGraph(id, dateFrom, dateTo);
   }
 }

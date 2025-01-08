@@ -1,18 +1,32 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { PermissionType } from '@prisma/client';
+import { Payload, EventPattern } from '@nestjs/microservices';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Get, Param, UseGuards, Controller } from '@nestjs/common';
+import { PermissionsGuard } from 'src/auth/guards/permissions.guard';
+import { sensorsTopics } from 'src/constants/sensors-topics.constants';
+import { HasPermission } from 'src/auth/decorators/has-permission.decorator';
 import { ThermometerDataService } from './thermometer-data.service';
 import { CreateThermometerDatumDto } from './dto/create-thermometer-datum.dto';
-import { EventPattern, Payload } from '@nestjs/microservices';
-import { sensorsTopics } from 'src/constants/sensors-topics.constants';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { PermissionsGuard } from 'src/auth/guards/permissions.guard';
-import { HasPermission } from 'src/auth/decorators/has-permission.decorator';
-import { PermissionType } from '@prisma/client';
 
 @Controller('thermometer-data')
 export class ThermometerDataController {
   constructor(
     private readonly thermometerDataService: ThermometerDataService,
   ) {}
+
+  @Get()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.GRAPHS_VIEW])
+  getAllThermometerData() {
+    return this.thermometerDataService.getAllThermometerData();
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.GRAPHS_VIEW])
+  getOneThermometerData(@Param('id') id: string) {
+    return this.thermometerDataService.getOneThermometerData(id);
+  }
 
   @EventPattern(sensorsTopics.thermometerData)
   createThermometerDatum(
@@ -21,19 +35,5 @@ export class ThermometerDataController {
     return this.thermometerDataService.createThermometerDatum(
       createThermometerDatumDto,
     );
-  }
-
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.GRAPHS_VIEW])
-  @Get()
-  getAllThermometerData() {
-    return this.thermometerDataService.getAllThermometerData();
-  }
-
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.GRAPHS_VIEW])
-  @Get(':id')
-  getOneThermometerData(@Param('id') id: string) {
-    return this.thermometerDataService.getOneThermometerData(id);
   }
 }

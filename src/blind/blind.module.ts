@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { BlindService } from './blind.service';
 import { DatabaseModule } from 'src/database/database.module';
+import { BlindService } from './blind.service';
 
 @Module({
+  exports: [BlindService],
   imports: [DatabaseModule],
   providers: [BlindService],
-  exports: [BlindService],
 })
 export class BlindModule {}
