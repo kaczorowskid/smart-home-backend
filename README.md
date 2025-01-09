@@ -70,6 +70,18 @@ Before running the project, ensure you have the following installed:
 
 ### Development Server
 
+Run the migration:
+
+```bash
+npx prisma migrate dev
+```
+
+Seed the database:
+
+```bash
+npx prisma db seed
+```
+
 Run the application locally:
 
 ```bash
