@@ -9,6 +9,7 @@ import { RoleModule } from './role/role.module';
 import { BlindModule } from './blind/blind.module';
 import { EmailModule } from './email/email.module';
 import { DevicesModule } from './devices/devices.module';
+import { CleanupModule } from './cleanup/cleanup.module';
 import { DatabaseModule } from './database/database.module';
 import { ThermometerModule } from './thermometer/thermometer.module';
 import { ThermometerDataModule } from './thermometer-data/thermometer-data.module';
@@ -40,6 +41,7 @@ import { PrismaExceptionFilter } from './common/exceptions/prisma-exceptions.fil
     EmailModule,
     RoomModule,
     RoleModule,
+    CleanupModule,
   ],
 })
 export class AppModule {}

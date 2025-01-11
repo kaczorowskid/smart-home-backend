@@ -14,10 +14,10 @@ import { EmailService } from './email.service';
       useFactory: async (configService: ConfigService) => ({
         verifyTransporters: true,
         transport: {
-          service: configService.get<string>('EMAIL_SERVICE'),
+          service: configService.getOrThrow<string>('EMAIL_SERVICE'),
           auth: {
-            user: configService.get<string>('EMAIL_USERNAME'),
-            pass: configService.get<string>('EMAIL_PASSWORD'),
+            user: configService.getOrThrow<string>('EMAIL_USERNAME'),
+            pass: configService.getOrThrow<string>('EMAIL_PASSWORD'),
           },
         },
       }),

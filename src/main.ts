@@ -18,14 +18,14 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.MQTT,
     options: {
-      url: configService.get<string>('MQTT_BROKER_URL'),
+      url: configService.getOrThrow<string>('MQTT_BROKER_URL'),
     },
   });
 
   app.enableCors({
     credentials: true,
-    origin: configService.get<string>('CORS_ORIGIN')
-      ? configService.get<string>('CORS_ORIGIN').split(',')
+    origin: configService.getOrThrow<string>('CORS_ORIGIN')
+      ? configService.getOrThrow<string>('CORS_ORIGIN').split(',')
       : ['http://localhost:5173'],
   });
 
