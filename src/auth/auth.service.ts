@@ -68,14 +68,18 @@ export class AuthService {
       { id: user.id },
       {
         expiresIn: `${accessTokenExpirationMs}ms`,
-        secret: this.configService.getOrThrow('JWT_ACCESS_TOKEN_SECRET'),
+        secret: this.configService.getOrThrow<string>(
+          'JWT_ACCESS_TOKEN_SECRET',
+        ),
       },
     );
     const refreshToken = this.jwtService.sign(
       { id: user.id },
       {
         expiresIn: `${refreshTokenExpirationMs}ms`,
-        secret: this.configService.getOrThrow('JWT_REFRESH_TOKEN_SECRET'),
+        secret: this.configService.getOrThrow<string>(
+          'JWT_REFRESH_TOKEN_SECRET',
+        ),
       },
     );
 
@@ -86,13 +90,13 @@ export class AuthService {
     response.cookie('access-token', accessToken, {
       httpOnly: true,
       expires: expiresAccessToken,
-      secure: this.configService.get('NODE_ENV') !== 'dev',
+      secure: this.configService.getOrThrow<string>('NODE_ENV') !== 'dev',
     });
 
     response.cookie('refresh-token', refreshToken, {
       httpOnly: true,
       expires: expiresRefreshToken,
-      secure: this.configService.get('NODE_ENV') !== 'dev',
+      secure: this.configService.getOrThrow<string>('NODE_ENV') !== 'dev',
     });
   }
 }
