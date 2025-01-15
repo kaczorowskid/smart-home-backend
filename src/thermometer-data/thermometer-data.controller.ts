@@ -14,20 +14,6 @@ export class ThermometerDataController {
     private readonly thermometerDataService: ThermometerDataService,
   ) {}
 
-  @Get()
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.GRAPHS_VIEW])
-  getAllThermometerData() {
-    return this.thermometerDataService.getAllThermometerData();
-  }
-
-  @Get(':id')
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.GRAPHS_VIEW])
-  getOneThermometerData(@Param('id') id: string) {
-    return this.thermometerDataService.getOneThermometerData(id);
-  }
-
   @EventPattern(sensorsTopics.thermometerData)
   createThermometerDatum(
     @Payload() createThermometerDatumDto: CreateThermometerDatumDto,
@@ -35,5 +21,16 @@ export class ThermometerDataController {
     return this.thermometerDataService.createThermometerDatum(
       createThermometerDatumDto,
     );
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @HasPermission([
+    PermissionType.IS_ADMIN,
+    PermissionType.DASHBOARD_VIEW,
+    PermissionType.ROOMS_VIEW,
+  ])
+  getOneThermometerDataLogs(@Param('id') id: string) {
+    return this.thermometerDataService.getOneThermometerDataLogs(id);
   }
 }
