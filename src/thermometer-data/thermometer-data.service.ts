@@ -4,8 +4,6 @@ import { DatabaseService } from 'src/database/database.service';
 import { mapValuesFromDevice } from './thermometer-data.mapper';
 import { CreateThermometerDatumDto } from './dto/create-thermometer-datum.dto';
 
-const { to, from } = dateLastDay;
-
 @Injectable()
 export class ThermometerDataService {
   constructor(private readonly databaseService: DatabaseService) {}
@@ -19,10 +17,7 @@ export class ThermometerDataService {
   }
 
   async getOneThermometerDataLogs(id: string) {
-    console.log({
-      lte: to,
-      gte: from,
-    });
+    const { to, from } = dateLastDay;
 
     return await this.databaseService.thermometerData.findMany({
       orderBy: {
