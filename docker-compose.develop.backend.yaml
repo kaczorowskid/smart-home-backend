@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:17.2-alpine
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend-network
+    ports:
+      - 5432:5432
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_ACCESS_TOKEN_SECRET: ${JWT_ACCESS_TOKEN_SECRET}
+      JWT_REFRESH_TOKEN_SECRET: ${JWT_REFRESH_TOKEN_SECRET}
+      JWT_USER_CRETE_SECRET: ${JWT_USER_CRETE_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
+      EMAIL_SERVICE: ${EMAIL_SERVICE}
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      BACKEND_IMAGE: ${BACKEND_IMAGE}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      NODE_ENV: ${NODE_ENV}
+      MQTT_BROKER_URL: ${MQTT_BROKER_URL}
+    depends_on:
+      - postgres
+    networks:
+      - backend-network
+    ports:
+      - 3001:3001
+
+volumes:
+  postgres_data:
+
+networks:
+  backend-network:
+    driver: bridge
+    name: backend-network

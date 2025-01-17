@@ -41,7 +41,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: 'docker-compose.yaml'
+          source: 'docker-compose.deploy.yaml'
           target: 'app'
 
       - name: Deploy to VPS
@@ -53,6 +53,6 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd app
-            docker-compose --env-file ../envs/smart-house/.env.production.backend down
-            docker-compose --env-file ../envs/smart-house/.env.production.backend pull
-            docker-compose --env-file ../envs/smart-house/.env.production.backend up -d
+            docker-compose --env-file ../envs/smart-house/.env.production.backend -f ../app/docker-compose.deploy.backend.yaml down
+            docker-compose --env-file ../envs/smart-house/.env.production.backend -f ../app/docker-compose.deploy.backend.yaml pull
+            docker-compose --env-file ../envs/smart-house/.env.production.backend -f ../app/docker-compose.deploy.backend.yaml up -d
