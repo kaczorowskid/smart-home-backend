@@ -112,15 +112,13 @@ yarn start:prod
 
 ## Docker
 
-1. Build the Docker image:
+1. Build and run the container locally:
+
    ```bash
-   docker build -t smart-home-backend .
+   docker compose --env-file .env -f docker-compose.develop.backend.yaml up -d --build
    ```
-2. Run the container:
-   ```bash
-    docker-compose --env-file .env pull
-    docker-compose --env-file .env up -d
-   ```
+
+   The backend service will be available at `http://localhost:3001` by default.
 
 ## Environment Variables
 
