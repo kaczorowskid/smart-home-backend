@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { dateLastDay } from 'src/constants/date.const';
+import { endOfDay, startOfDay } from 'date-fns';
 import { DatabaseService } from 'src/database/database.service';
 import { mapValuesFromDevice } from './thermometer-data.mapper';
 import { CreateThermometerDatumDto } from './dto/create-thermometer-datum.dto';
@@ -17,8 +17,6 @@ export class ThermometerDataService {
   }
 
   async getOneThermometerDataLogs(id: string) {
-    const { to, from } = dateLastDay;
-
     return await this.databaseService.thermometerData.findMany({
       orderBy: {
         createdAt: 'desc',
@@ -28,8 +26,8 @@ export class ThermometerDataService {
           id,
         },
         createdAt: {
-          lte: to,
-          gte: from,
+          lte: endOfDay(new Date()),
+          gte: startOfDay(new Date()),
         },
       },
     });
