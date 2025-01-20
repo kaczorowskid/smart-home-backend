@@ -67,6 +67,9 @@ export class ThermometerService {
       select: {
         name: true,
         data: {
+          orderBy: {
+            date: 'asc',
+          },
           select: {
             date: true,
             humidity: true,
