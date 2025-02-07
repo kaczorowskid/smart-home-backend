@@ -22,4 +22,4 @@ RUN npm install
 
 EXPOSE 3001
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node ./dist/prisma/seeds/seed.js && node ./dist/src/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node ./dist/src/main.js"]
