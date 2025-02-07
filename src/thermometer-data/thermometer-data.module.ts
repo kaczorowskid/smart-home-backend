@@ -5,6 +5,7 @@ import { ThermometerDataService } from './thermometer-data.service';
 import { ThermometerDataController } from './thermometer-data.controller';
 
 @Module({
+  exports: [ThermometerDataService],
   providers: [ThermometerDataService],
   controllers: [ThermometerDataController],
   imports: [
