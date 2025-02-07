@@ -16,8 +16,30 @@ export class ThermometerDataService {
     });
   }
 
+  async getMinMaxSensorValue(id: string) {
+    return await this.databaseService.thermometerData.aggregate({
+      _min: {
+        humidity: true,
+        temperature: true,
+      },
+      _max: {
+        humidity: true,
+        temperature: true,
+      },
+      where: {
+        Thermometer: {
+          id,
+        },
+        createdAt: {
+          lte: endOfDay(new Date()),
+          gte: startOfDay(new Date()),
+        },
+      },
+    });
+  }
+
   async getOneThermometerDataLogs(id: string) {
-    return await this.databaseService.thermometerData.findMany({
+    const data = await this.databaseService.thermometerData.findMany({
       orderBy: {
         createdAt: 'desc',
       },
@@ -31,5 +53,13 @@ export class ThermometerDataService {
         },
       },
     });
+
+    const minMax = await this.getMinMaxSensorValue(id);
+
+    return {
+      data,
+      min: minMax._min,
+      max: minMax._max,
+    };
   }
 }
