@@ -64,11 +64,13 @@ export class ThermometerService {
 
     const minMax = await this.thermometerDataService.getMinMaxSensorValue(id);
 
-    return {
-      ...mapThermometerStatus(thermometer),
-      min: minMax._min,
-      max: minMax._max,
-    };
+    return thermometer
+      ? {
+          ...mapThermometerStatus(thermometer),
+          min: minMax._min,
+          max: minMax._max,
+        }
+      : null;
   }
 
   async getDataForGraph(id: string, dateFrom: Date, dateTo: Date) {
