@@ -6,7 +6,7 @@ import { EmailService } from 'src/email/email.service';
 import { DatabaseService } from 'src/database/database.service';
 import { userCreateTokenExpiration } from 'src/constants/tokens-expiration.constants';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CretaeUserByAdminDto } from './dto/create-user-by-admin.dto';
+import { CreateUserByAdminDto } from './dto/create-user-by-admin.dto';
 
 @Injectable()
 export class UserService {
@@ -24,7 +24,7 @@ export class UserService {
   }
 
   async getUserByToken(token: string) {
-    const { email } = this.jwtService.decode(token);
+    const { email } = this.jwtService.verify(token);
 
     return this.getOneUserByEmail(email);
   }
@@ -85,20 +85,20 @@ export class UserService {
     });
   }
 
-  async verifyUser(id: string, udpateUserDto: UpdateUserDto) {
-    const passwordHash = await bcrypt.hash(udpateUserDto.password, 10);
+  async verifyUser(id: string, updateUserDto: UpdateUserDto) {
+    const passwordHash = await bcrypt.hash(updateUserDto.password, 10);
 
     return await this.databaseService.user.update({
       where: { id },
       data: {
-        ...udpateUserDto,
+        ...updateUserDto,
         isVerified: true,
         password: passwordHash,
       },
     });
   }
 
-  async createUserByAdmin(createUserByAdminDto: CretaeUserByAdminDto) {
+  async createUserByAdmin(createUserByAdminDto: CreateUserByAdminDto) {
     const user = await this.databaseService.user.create({
       data: {
         name: '',
@@ -114,7 +114,7 @@ export class UserService {
       { email: user.email },
       {
         expiresIn: userCreateTokenExpiration,
-        secret: this.configService.getOrThrow<string>('JWT_USER_CRETE_SECRET'),
+        secret: this.configService.getOrThrow<string>('JWT_USER_CREATE_SECRET'),
       },
     );
 

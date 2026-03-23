@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CretaeUserByAdminDto } from './dto/create-user-by-admin.dto';
+import { CreateUserByAdminDto } from './dto/create-user-by-admin.dto';
 
 @Controller('user')
 export class UserController {
@@ -28,9 +28,9 @@ export class UserController {
   @Patch('/verify/:id')
   async verifyUser(
     @Param('id') id: string,
-    @Body() udpateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.verifyUser(id, udpateUserDto);
+    return this.userService.verifyUser(id, updateUserDto);
   }
 
   @Get()
@@ -64,13 +64,13 @@ export class UserController {
   @Post()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_ADD_USER])
-  async createUser(@Body() createUserByAdminDto: CretaeUserByAdminDto) {
+  async createUser(@Body() createUserByAdminDto: CreateUserByAdminDto) {
     return this.userService.createUserByAdmin(createUserByAdminDto);
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_DELETE_USER])
+  @HasPermission([PermissionType.IS_ADMIN, PermissionType.OPTIONS_UPDATE_USER])
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,

@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { UsersSeeder } from './seeders/users.seeder';
 import { RoomsSeeder } from './seeders/rooms.seeder';
-import { RolesSeeder } from './seeders/roles.sedeer';
+import { RolesSeeder } from './seeders/roles.seeder';
 import { BlindsSeeder } from './seeders/blinds.seeder';
 import { PermissionsSeeder } from './seeders/permissions.seeder';
 import { ThermometersSeeder } from './seeders/thermometers.seeder';
